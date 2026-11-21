@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donor Registration</title>
+         <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: white;
+        }
+
+        h1 {
+            text-align: center;
+            color: darkred;
+        }
+
+        form {
+            width: 450px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid black;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: auto;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 9px 15px;
+            background-color: darkred;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: red;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+        }
+
+        table {
+            width: 80%;
+            margin: 25px auto;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: darkred;
+            color: white;
+        }
+
+        #count {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blood Donor Registration</h1>
+    <form id="regForm" method="post" action="#" novalidate onsubmit="return validateForm()">
+
+        <label>Full Name</label>
+        <input type="text" id="fname" required minlength="3">
+        <span class="error" id="err-fname"></span>
+
+        <label>AIUB ID</label>
+        <input type="text" id="sid" required pattern="[0-9]{2}-[0-9]{5}-[0-9]">
+        <span class="error" id="err-sid"></span>
+
+        <label>Mobile</label>
+        <input type="text" id="phone" required pattern="[0-9]{11}">
+        <span class="error" id="err-phone"></span>
+
+        <label>Age</label>
+        <input type="number" id="age" required min="18" max="60">
+        <span class="error" id="err-age"></span>
+
+ <label>Blood Group</label>
+        <select id="bgroup" required>
+            <option value="">Select blood group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+           </select>
+            <span class="error" id="err-bgroup"></span>
+
+            <label>Donated Before?</label>
+            <input type="radio" name="donated" id="donated-yes" value="Yes" required >Yes
+
+            <label>Donated Before?</label>
+            <input type="radio" name="donated" id="donated-no" value="No" required >No
+
+              <span class="error" id="err-donated"></span>
+
+              <label>
+            <input type="checkbox" id="agree" required>
+            I am healthy and willing to donate
+        </label>
+        <span class="error" id="err-agree"></span>
+
+        <label>Password:</label>
+        <input type="password" id="pass" required minlength="6">
+        <span class="error" id="err-pass"></span>
+
+        <label>Confirm Password</label>
+        <input type="password" id="pass2" required>
+        <span class="error" id="err-pass2"></span>
+        <button type="submit">Register Donor</button>
+        </form>
+
+        <p id="count">Total donors: 2</p>
+
+    <table id="list">
+        <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Blood Group</th>
+            <th>Action</th>
+        </tr>
+    </table>
+
+     <script>
+
+         function validateForm() {
+
+            let valid = true;
+
+            let name = document.getElementById("fname").value.trim();
+            let id = document.getElementById("sid").value.trim();
+            let phone = document.getElementById("phone").value.trim();
+            let age = Number(document.getElementById("age").value);
+            let group = document.getElementById("bgroup").value;
+            let password = document.getElementById("pass").value;
+            let confirmPass = document.getElementById("pass2").value;
+
+            let donated = document.querySelector('input[name="donated"]:checked');
+            let agree = document.getElementById("agree").checked;
+          let errors = document.querySelectorAll(".error");
+
+            errors.forEach(function(error) {
+                error.innerHTML = "";
+            });
+             if (name.length < 3) {
+                document.getElementById("err-fname").innerHTML =
+                    "Name must have at least 3 char.";
+                valid = false;
+            }
+             let idPattern = [0-9]{2}-[0-9]{5}-[0-9];
+
+            if (!idPattern.test(id)) {
+                document.getElementById("err-sid").innerHTML =
+                    "ID must like 24-58215-2.";
+                valid = false;
+            }
+            let phonePattern = /^[0-9]{11}$/;
+
+            if (!phonePattern.test(phone)) {
+                document.getElementById("err-phone").innerHTML =
+                    "Mobile must 11 digits.";
+                valid = false;
+            }
+
+             if (document.getElementById("age").value === "" ||
+                age < 18 || age > 60) {
+
+                document.getElementById("err-age").innerHTML =
+                    "Age must between 18 and 60.";
+                valid = false;
+            }
+
+             if (group === "") {
+                document.getElementById("err-bgroup").innerHTML =
+                    "Select a blood group.";
+                valid = false;
+            }
+
+             if (donated === null) {
+                document.getElementById("err-donated").innerHTML =
+                    "Select Yes or No.";
+                valid = false;
+            }
+
+             if (!agree) {
+                document.getElementById("err-agree").innerHTML =
+                    "Please accept the confirmation.";
+                valid = false;
+            }
+
+              if (password.length < 6) {
+                document.getElementById("err-pass").innerHTML =
+                    "Password must have at least 6 characters.";
+                valid = false;
+            }
+
+             if (confirmPass === "" || confirmPass !== password) {
+                document.getElementById("err-pass2").innerHTML =
+                    "Passwords do not match.";
+                valid = false;
+            }
+
+              if (valid) {
+
+                let donor = {
+                    name: name,
+                    id: id,
+                    group: group
+                };
+
+                donors.push(donor);
+
+                addRow(donor);
+
+                updateCount();
+
+                document.getElementById("regForm").reset();
+            }
+                return false;
+        }
+
+</script>
+
+</body>
+</html>
